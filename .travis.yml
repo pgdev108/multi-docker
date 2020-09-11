@@ -1,24 +1,22 @@
 sudo: required
 services:
-    - docker
+  - docker
 
 before_install:
-    - docker build -t pgdevdocker/react-test -f ./client/Dockerfile.dev ./client
-    
+  - docker build -t pgdevdocker/react-test -f ./client/Dockerfile.dev ./client
+
 script:
-    - docker run -e CI=true USERNAME/react-test npm test
+  - docker run pgdevdocker/react-test npm test -- --coverage
 
-after-success:
-    - docker build -t pgdevdocker/multi-client ./client
-    - docker build -t pgdevdocker/multi-nginx ./nginx
-    - docker build -t pgdevdocker/multi-server ./server
-    - docker build -t pgdevdocker/multi-worker ./worker
-
-# Login to docker cli
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-# Take those images and push them to docker hub
-- docker push pgdevdocker/multi-client
-- docker push pgdevdocker/multi-nginx
-- docker push pgdevdocker/multi-server
-- docker push pgdevdocker/multi-worker
+after_success:
+  - docker build -t pgdevdocker/multi-client ./client
+  - docker build -t pgdevdocker/multi-nginx ./nginx
+  - docker build -t pgdevdocker/multi-server ./server
+  - docker build -t pgdevdocker/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push pgdevdocker/multi-client
+  - docker push pgdevdocker/multi-nginx
+  - docker push pgdevdocker/multi-server
+  - docker push pgdevdocker/multi-worker
