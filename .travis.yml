@@ -21,18 +21,15 @@ after_success:
   - docker push pgdevdocker/multi-server
   - docker push pgdevdocker/multi-worker
 
-  access_key_id: $AWS_ACCESS_KEY
-secret_access_key: $AWS_SECRET_KEY
-
-deploy:
+  deploy:
     provider: elasticbeanstalk
     region: us-west-1
     app: multi-docker
     env: MultiDocker-env
-    bucker-name: elasticbeanstalk-us-west-1-484032209650
-    bucker-path: docker-multi
+    bucket_name: elasticbeanstalk-us-west-1-484032209650
+    bucket_path: docker-multi
     on:
-        branch: master
+      branch: master
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key:
-        secure: $AWS_SECRET_KEY
+      secure: $AWS_SECRET_KEY
