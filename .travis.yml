@@ -4,9 +4,9 @@ services:
 
 before_install:
     - docker build -t pgdevdocker/react-test -f ./client/Dockerfile.dev ./client
-
+    
 script:
-    - docker run pgdevdocker/react-test npm test -- --coverage 
+    - docker run -e CI=true USERNAME/react-test npm test
 
 after-success:
     - docker build -t pgdevdocker/multi-client ./client
